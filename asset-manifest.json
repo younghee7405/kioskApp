@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/kioskApp/static/css/main.f855e6bc.css",
-    "main.js": "/kioskApp/static/js/main.d7e4600c.js",
+    "main.js": "/kioskApp/static/js/main.cff9355f.js",
     "static/js/453.a6d70689.chunk.js": "/kioskApp/static/js/453.a6d70689.chunk.js",
     "index.html": "/kioskApp/index.html",
     "main.f855e6bc.css.map": "/kioskApp/static/css/main.f855e6bc.css.map",
-    "main.d7e4600c.js.map": "/kioskApp/static/js/main.d7e4600c.js.map",
+    "main.cff9355f.js.map": "/kioskApp/static/js/main.cff9355f.js.map",
     "453.a6d70689.chunk.js.map": "/kioskApp/static/js/453.a6d70689.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.d7e4600c.js"
+    "static/js/main.cff9355f.js"
   ]
 }
