@@ -9,10 +9,11 @@ const KioskApp = () => {
 
   const categories = [
     { id: 'burger', name: '햄버거', icon: '🍔' },
+    { id: 'burgerset', name: '햄버거세트', icon: '🍔🍟🥤' },
     { id: 'chicken', name: '치킨', icon: '🍗' },
     { id: 'side', name: '사이드', icon: '🍟' },
     { id: 'drink', name: '음료', icon: '🥤' },
-    { id: 'dessert', name: '디저트', icon: '🍰' }
+    { id: 'dessert', name: '디저트', icon: '🍰' },
   ];
 
   const menuItems = {
@@ -20,6 +21,12 @@ const KioskApp = () => {
       { id: 1, name: '빅맥', price: 6500, image: '🍔' },
       { id: 2, name: '치즈버거', price: 4500, image: '🍔' },
       { id: 3, name: '불고기버거', price: 5500, image: '🍔' }
+    ],
+    burgerset: [
+      { id: 1, name: '빅맥세트', price: 9500, image: '🍔🍟🥤' },
+      { id: 2, name: '치즈버거세트', price: 8500, image: '🍔🍟🥤' },
+      { id: 3, name: '불고기버거세트', price: 8000, image: '🍔🍟🥤' },
+      { id: 4, name: '새우버거세트거', price: 9500, image: '🍔🍟🥤' }
     ],
     chicken: [
       { id: 4, name: '치킨너겟', price: 4000, image: '🍗' },
