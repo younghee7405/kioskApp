@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { ShoppingCart, ArrowLeft, Plus, Minus, X, CreditCard, Banknote, Check, Menu } from 'lucide-react';
+import { ShoppingCart, ArrowLeft, Plus, Minus, X, CreditCard, Banknote, Check } from 'lucide-react';
 
 const KioskApp = () => {
   const [currentScreen, setCurrentScreen] = useState('home');
   const [cart, setCart] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('burger');
   const [showTutorial, setShowTutorial] = useState(true);
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const categories = [
     { id: 'burger', name: '햄버거', icon: '🍔' },
@@ -126,95 +125,69 @@ const KioskApp = () => {
 
   const MenuScreen = () => (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
       <div className="bg-red-600 text-white p-3 sm:p-4 flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4">
           <button 
             onClick={() => setCurrentScreen('home')}
             className="p-2 bg-red-700 rounded-lg hover:bg-red-800"
           >
-            <ArrowLeft size={20} className="sm:w-6 sm:h-6" />
+            <ArrowLeft size={20} />
           </button>
           <h1 className="text-lg sm:text-xl md:text-2xl font-bold">메뉴 선택</h1>
         </div>
-        <div className="flex items-center gap-2">
-          {/* Mobile menu button */}
-          <button 
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="p-2 bg-red-700 rounded-lg hover:bg-red-800 md:hidden"
-          >
-            <Menu size={20} />
-          </button>
-          <button 
-            onClick={() => setCurrentScreen('cart')}
-            className="flex items-center gap-1 sm:gap-2 bg-red-700 px-2 sm:px-3 md:px-4 py-2 rounded-lg hover:bg-red-800"
-          >
-            <ShoppingCart size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
-            <span className="text-sm sm:text-base md:text-lg">장바구니 ({cart.length})</span>
-          </button>
-        </div>
+        <button 
+          onClick={() => setCurrentScreen('cart')}
+          className="flex items-center gap-1 sm:gap-2 bg-red-700 px-2 sm:px-3 md:px-4 py-2 rounded-lg hover:bg-red-800"
+        >
+          <ShoppingCart size={18} />
+          <span className="text-sm sm:text-base md:text-lg">장바구니 ({cart.length})</span>
+        </button>
       </div>
 
-      <div className="flex flex-col md:flex-row">
-        {/* Category Sidebar */}
-        <div className={`${showMobileMenu ? 'block' : 'hidden'} md:block w-full md:w-64 bg-white shadow-lg`}>
-          <div className="p-3 sm:p-4">
-            <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">카테고리</h2>
-            <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
-              {categories.map(category => (
-                <button
-                  key={category.id}
-                  onClick={() => {
-                    setSelectedCategory(category.id);
-                    setShowMobileMenu(false);
-                  }}
-                  className={`w-full p-3 sm:p-4 rounded-lg text-left flex items-center gap-2 sm:gap-3 text-sm sm:text-base md:text-lg font-semibold transition-colors ${
-                    selectedCategory === category.id 
-                      ? 'bg-red-600 text-white' 
-                      : 'bg-gray-100 hover:bg-gray-200'
-                  }`}
-                >
-                  <span className="text-lg sm:text-xl md:text-2xl">{category.icon}</span>
-                  <span className="truncate">{category.name}</span>
-                </button>
-              ))}
-            </div>
+      <div className="p-3 sm:p-4 md:p-6">
+        {/* 카테고리 섹션 */}
+        <div className="mb-4 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">카테고리</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3">
+            {categories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`p-3 sm:p-4 rounded-lg text-center flex flex-col items-center gap-1 sm:gap-2 text-sm sm:text-base font-semibold transition-colors ${
+                  selectedCategory === category.id 
+                    ? 'bg-red-600 text-white shadow-lg' 
+                    : 'bg-white hover:bg-gray-50 shadow-md'
+                }`}
+              >
+                <span className="text-2xl sm:text-3xl">{category.icon}</span>
+                <span className="truncate">{category.name}</span>
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Menu Items */}
-        <div className="flex-1 p-3 sm:p-4 md:p-6">
-          {selectedCategory ? (
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-                {categories.find(cat => cat.id === selectedCategory)?.name}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-                {menuItems[selectedCategory]?.map(item => (
-                  <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                    <div className="p-4 sm:p-5 md:p-6 text-center">
-                      <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">{item.image}</div>
-                      <h3 className="text-lg sm:text-xl font-bold mb-2">{item.name}</h3>
-                      <p className="text-xl sm:text-2xl font-bold text-red-600 mb-3 sm:mb-4">{item.price.toLocaleString()}원</p>
-                      <button
-                        onClick={() => addToCart(item)}
-                        className="w-full bg-red-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base md:text-lg font-semibold hover:bg-red-700 transition-colors"
-                      >
-                        장바구니에 담기
-                      </button>
-                    </div>
-                  </div>
-                ))}
+        {/* 메뉴 항목 섹션 */}
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+            {categories.find(cat => cat.id === selectedCategory)?.name}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            {menuItems[selectedCategory]?.map(item => (
+              <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div className="p-4 sm:p-5 md:p-6 text-center">
+                  <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">{item.image}</div>
+                  <h3 className="text-lg sm:text-xl font-bold mb-2">{item.name}</h3>
+                  <p className="text-xl sm:text-2xl font-bold text-red-600 mb-3 sm:mb-4">{item.price.toLocaleString()}원</p>
+                  <button
+                    onClick={() => addToCart(item)}
+                    className="w-full bg-red-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base md:text-lg font-semibold hover:bg-red-700 transition-colors"
+                  >
+                    장바구니에 담기
+                  </button>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="text-center py-12 sm:py-16 md:py-20">
-              <p className="text-lg sm:text-xl md:text-2xl text-gray-600">
-                <span className="md:hidden">위에서 카테고리를 선택해주세요</span>
-                <span className="hidden md:inline">왼쪽에서 카테고리를 선택해주세요</span>
-              </p>
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -222,14 +195,13 @@ const KioskApp = () => {
 
   const CartScreen = () => (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
       <div className="bg-red-600 text-white p-3 sm:p-4 flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4">
           <button 
             onClick={() => setCurrentScreen('menu')}
             className="p-2 bg-red-700 rounded-lg hover:bg-red-800"
           >
-            <ArrowLeft size={20} className="sm:w-6 sm:h-6" />
+            <ArrowLeft size={20} />
           </button>
           <h1 className="text-lg sm:text-xl md:text-2xl font-bold">장바구니</h1>
         </div>
@@ -266,21 +238,21 @@ const KioskApp = () => {
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
                           className="p-1 sm:p-2 bg-gray-200 rounded-lg hover:bg-gray-300"
                         >
-                          <Minus size={16} className="sm:w-5 sm:h-5" />
+                          <Minus size={16} />
                         </button>
                         <span className="text-lg sm:text-xl font-semibold w-6 sm:w-8 text-center">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           className="p-1 sm:p-2 bg-gray-200 rounded-lg hover:bg-gray-300"
                         >
-                          <Plus size={16} className="sm:w-5 sm:h-5" />
+                          <Plus size={16} />
                         </button>
                       </div>
                       <button
                         onClick={() => removeFromCart(item.id)}
                         className="p-1 sm:p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200"
                       >
-                        <X size={16} className="sm:w-5 sm:h-5" />
+                        <X size={16} />
                       </button>
                     </div>
                   </div>
@@ -307,14 +279,13 @@ const KioskApp = () => {
 
   const PaymentScreen = () => (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
       <div className="bg-red-600 text-white p-3 sm:p-4 flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4">
           <button 
             onClick={() => setCurrentScreen('cart')}
             className="p-2 bg-red-700 rounded-lg hover:bg-red-800"
           >
-            <ArrowLeft size={20} className="sm:w-6 sm:h-6" />
+            <ArrowLeft size={20} />
           </button>
           <h1 className="text-lg sm:text-xl md:text-2xl font-bold">결제</h1>
         </div>
@@ -347,7 +318,7 @@ const KioskApp = () => {
                 onClick={() => setCurrentScreen('complete')}
                 className="flex items-center justify-center gap-3 sm:gap-4 p-4 sm:p-6 border-2 border-gray-300 rounded-lg hover:border-red-600 hover:bg-red-50 transition-colors"
               >
-                <CreditCard size={24} className="sm:w-8 sm:h-8 text-red-600 flex-shrink-0" />
+                <CreditCard size={24} className="text-red-600 flex-shrink-0" />
                 <div className="text-left">
                   <h3 className="text-lg sm:text-xl font-semibold">카드 결제</h3>
                   <p className="text-sm sm:text-base text-gray-600">신용카드, 체크카드</p>
@@ -357,7 +328,7 @@ const KioskApp = () => {
                 onClick={() => setCurrentScreen('complete')}
                 className="flex items-center justify-center gap-3 sm:gap-4 p-4 sm:p-6 border-2 border-gray-300 rounded-lg hover:border-red-600 hover:bg-red-50 transition-colors"
               >
-                <Banknote size={24} className="sm:w-8 sm:h-8 text-red-600 flex-shrink-0" />
+                <Banknote size={24} className="text-red-600 flex-shrink-0" />
                 <div className="text-left">
                   <h3 className="text-lg sm:text-xl font-semibold">현금 결제</h3>
                   <p className="text-sm sm:text-base text-gray-600">현금으로 결제</p>
@@ -374,7 +345,7 @@ const KioskApp = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8 text-center max-w-sm sm:max-w-md w-full">
         <div className="text-green-600 mb-4">
-          <Check size={48} className="sm:w-16 sm:h-16 mx-auto" />
+          <Check size={48} className="mx-auto" />
         </div>
         <h2 className="text-2xl sm:text-3xl font-bold mb-4">주문 완료!</h2>
         <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
@@ -387,8 +358,7 @@ const KioskApp = () => {
           onClick={() => {
             setCurrentScreen('home');
             setCart([]);
-            setSelectedCategory(null);
-            setShowMobileMenu(false);
+            setSelectedCategory('burger');
           }}
           className="w-full bg-red-600 text-white py-3 px-4 sm:px-6 rounded-lg text-base sm:text-lg font-semibold hover:bg-red-700"
         >
